@@ -1,0 +1,100 @@
+########################################
+# DEPLOY SULUHISHO A AWS - QUICK START
+########################################
+
+# 1. INSTALAR HERRAMIENTAS
+pip install awsebcli awscli
+
+# 2. CONFIGURAR AWS (solo primera vez)
+aws configure
+# Access Key: [pega tu key]
+# Secret Key: [pega tu secret]
+# Region: us-east-2
+# Output: json
+
+# 3. INICIALIZAR EB (solo primera vez)
+cd C:\Users\santi\Desktop\suluhisho
+eb init
+# Region: 18 (us-east-2 Ohio)
+# App name: suluhisho
+# Platform: Python
+# Platform branch: Python 3.13
+# CodeCommit: N
+# SSH: Y
+
+# 4. CREAR ENVIRONMENT Y DEPLOYAR
+eb create suluhisho-env
+# Espera 5-10 minutos...
+
+# 5. CONFIGURAR VARIABLES DE ENTORNO
+# Genera SECRET_KEY nuevo:
+eb setenv SECRET_KEY="django-insecure-GENERA-UNO-LARGO-Y-ALEATORIO"
+
+# Allowed hosts:
+eb setenv ALLOWED_HOSTS=".elasticbeanstalk.com,.amazonaws.com"
+
+# Admin credentials (opcional, default: admin/admin123):
+eb setenv DJANGO_ADMIN_USERNAME="admin" DJANGO_ADMIN_EMAIL="admin@suluhisho.com" DJANGO_ADMIN_PASSWORD="cambiar123"
+
+# 6. ABRIR APP
+eb open
+
+# 7. VERIFICAR
+# - Login: /admin/ con credenciales admin
+# - Dashboard: /admin-dashboard/
+
+########################################
+# COMANDOS ÚTILES
+########################################
+
+# Ver status
+eb status
+
+# Ver logs
+eb logs
+
+# Ver variables
+eb printenv
+
+# Deployar cambios
+eb deploy
+
+# SSH al servidor
+eb ssh
+
+# Terminar environment (CUIDADO: elimina todo)
+eb terminate suluhisho-env
+
+########################################
+# SI NECESITAS BASE DE DATOS POSTGRESQL
+########################################
+
+# 1. Crear RDS desde AWS Console
+# 2. Copiar endpoint, username, password
+# 3. Setear DATABASE_URL:
+eb setenv DATABASE_URL="postgresql://username:password@endpoint.rds.amazonaws.com:5432/suluhisho"
+
+########################################
+# TROUBLESHOOTING
+########################################
+
+# App no carga → Ver logs:
+eb logs --all
+
+# Error migrations → SSH y correr manual:
+eb ssh
+cd /var/app/current
+source /var/app/venv/*/bin/activate
+python manage.py migrate
+
+# Reiniciar app:
+eb ssh
+sudo systemctl restart web
+
+########################################
+# COSTOS ESTIMADOS
+########################################
+
+# Free Tier (12 meses): $0
+# Después: ~$20-30/mes (1 instancia t2.micro)
+# Con RDS: +$15-20/mes

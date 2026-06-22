@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Ikigai - Suluhisho{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="text-4xl">🎯</span>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Tu Ikigai Completado</h1>
+                    <p class="text-gray-600">{{ module.title }}</p>
+                </div>
+            </div>
+            
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                ✓ Completado
+            </span>
+        </div>
+    </div>
+    
+    <!-- Frase de Intersección (Destacada) -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-8 mb-8 text-white">
+        <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <span class="text-3xl mr-2">✨</span>
+            Tu Propósito
+        </h2>
+        <p class="text-xl leading-relaxed">
+            "{{ ikigai_data.frase_interseccion }}"
+        </p>
+    </div>
+    
+    <!-- Las 4 Áreas del Ikigai -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        
+        <!-- 1. Qué amas -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                <span class="text-2xl mr-2">❤️</span>
+                Lo que amas hacer
+            </h3>
+            <ul class="space-y-2">
+                {% for item in ikigai_data.que_amas %}
+                {% if item %}
+                <li class="flex items-start">
+                    <span class="text-red-500 mr-2">•</span>
+                    <span class="text-gray-700">{{ item }}</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- 2. En qué eres bueno -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                <span class="text-2xl mr-2">⭐</span>
+                En qué eres bueno/a
+            </h3>
+            <ul class="space-y-2">
+                {% for item in ikigai_data.en_que_eres_bueno %}
+                {% if item %}
+                <li class="flex items-start">
+                    <span class="text-yellow-500 mr-2">•</span>
+                    <span class="text-gray-700">{{ item }}</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- 3. Qué necesita tu comunidad -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                <span class="text-2xl mr-2">🏘️</span>
+                Necesidades de tu comunidad
+            </h3>
+            <ul class="space-y-2">
+                {% for item in ikigai_data.que_necesita_comunidad %}
+                {% if item %}
+                <li class="flex items-start">
+                    <span class="text-blue-500 mr-2">•</span>
+                    <span class="text-gray-700">{{ item }}</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- 4. Por qué pagarían -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                <span class="text-2xl mr-2">💰</span>
+                Por qué pagarían
+            </h3>
+            <ul class="space-y-2">
+                {% for item in ikigai_data.por_que_pagarian %}
+                {% if item %}
+                <li class="flex items-start">
+                    <span class="text-green-500 mr-2">•</span>
+                    <span class="text-gray-700">{{ item }}</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        
+    </div>
+    
+    <!-- Botones de acción -->
+    <div class="flex justify-between items-center">
+        <a href="{% url 'dashboard' %}" class="btn-secondary">
+            ← Volver al Dashboard
+        </a>
+        
+        <a href="{% url 'ikigai:form' %}" class="btn-primary">
+            Editar Ikigai
+        </a>
+    </div>
+    
+</div>
+{% endblock %}

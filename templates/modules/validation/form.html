@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Módulo 7: Validación - Suluhisho{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+<!-- Header -->
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<div class="flex items-start justify-between">
+<div class="flex items-start space-x-3">
+<div class="text-4xl">✅</div>
+<div><h1 class="text-2xl font-bold">Validación</h1><p class="text-sm text-gray-500">Módulo 7 de 7</p></div>
+</div>
+<div class="flex items-center gap-2">
+<a href="{% url 'validation:intro' %}" class="flex items-center gap-1 px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-xs font-medium">
+<span>📖</span><span>Guía</span>
+</a>
+<span class="px-3 py-1 rounded-full text-sm font-semibold {% if progress.status == 'completed' %}bg-green-100 text-green-800{% elif progress.status == 'in_progress' %}bg-yellow-100 text-yellow-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+{% if progress.status == 'completed' %}✓ Completado{% elif progress.status == 'in_progress' %}🔄 En progreso{% else %}▶️ Disponible{% endif %}
+</span>
+</div>
+</div>
+<p class="mt-3 text-gray-600">{{ module.description }}</p>
+<div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4">
+<h3 class="font-semibold text-blue-900 mb-2">📋 Instrucciones</h3>
+<p class="text-sm text-blue-800">Realiza al menos <strong>3 entrevistas</strong> con clientes potenciales. Valida si tienen el problema y si pagarían por tu solución.</p>
+</div>
+</div>
+
+<!-- Ejemplo Territorial -->
+{% include 'includes/territorial_example.html' %}
+
+<!-- Botón de Ayuda Flotante -->
+{% include 'includes/help_button.html' %}
+
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-semibold">Tu Progreso</h2>
+<span class="text-sm font-medium text-gray-600">{{ entries_count }} de 3 entrevistas mínimas</span>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-3">
+<div class="bg-blue-600 h-3 rounded-full" style="width: {{ progress.completion_percentage }}%"></div>
+</div>
+<p class="text-xs text-gray-500 mt-1">{{ progress.completion_percentage }}% completado</p>
+</div>
+
+{% if entries %}
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<h2 class="text-xl font-bold mb-4">📝 Tus Entrevistas</h2>
+<div class="space-y-4">
+{% for entry in entries %}
+<div class="border border-gray-200 rounded-lg p-4">
+<h3 class="font-semibold text-lg">Entrevista {{ forloop.counter }}: {{ entry.entrevistado }}</h3>
+<div class="mt-3 space-y-2 text-sm">
+<div><span class="font-semibold">Problema confirmado:</span> {{ entry.pregunta_problema }}</div>
+<div><span class="font-semibold">Pagaría:</span> <span class="px-2 py-1 rounded text-xs {% if entry.pagaria == 'si_seguro' %}bg-green-100 text-green-800{% elif entry.pagaria == 'si_quizas' %}bg-yellow-100 text-yellow-800{% else %}bg-red-100 text-red-800{% endif %}">{{ entry.pagaria }}</span></div>
+</div>
+</div>
+{% endfor %}
+</div>
+</div>
+{% endif %}
+
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<h2 class="text-xl font-bold mb-4">{% if entries_count == 0 %}➕ Primera Entrevista{% else %}➕ Nueva Entrevista ({{ entries_count }}/3){% endif %}</h2>
+<form method="post" class="space-y-6">
+{% csrf_token %}
+
+<!-- Entrevistado -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.entrevistado.label }}</label>
+{% if form.entrevistado.help_text %}
+<div class="mb-3 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.entrevistado.help_text }}</p>
+</div>
+{% endif %}
+{{ form.entrevistado }}
+{% if form.entrevistado.errors %}<p class="text-xs text-red-600 mt-1">{{ form.entrevistado.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Problema -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.pregunta_problema.label }}</label>
+{% if form.pregunta_problema.help_text %}
+<div class="mb-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.pregunta_problema.help_text }}</p>
+</div>
+{% endif %}
+{{ form.pregunta_problema }}
+{% if form.pregunta_problema.errors %}<p class="text-xs text-red-600 mt-1">{{ form.pregunta_problema.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Solución Actual -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.solucion_actual.label }}</label>
+{% if form.solucion_actual.help_text %}
+<div class="mb-3 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.solucion_actual.help_text }}</p>
+</div>
+{% endif %}
+{{ form.solucion_actual }}
+{% if form.solucion_actual.errors %}<p class="text-xs text-red-600 mt-1">{{ form.solucion_actual.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Reacción -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.reaccion_idea.label }}</label>
+{% if form.reaccion_idea.help_text %}
+<div class="mb-3 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.reaccion_idea.help_text }}</p>
+</div>
+{% endif %}
+{{ form.reaccion_idea }}
+{% if form.reaccion_idea.errors %}<p class="text-xs text-red-600 mt-1">{{ form.reaccion_idea.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Pagaría -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.pagaria.label }}</label>
+{% if form.pagaria.help_text %}
+<div class="mb-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.pagaria.help_text }}</p>
+</div>
+{% endif %}
+{{ form.pagaria }}
+{% if form.pagaria.errors %}<p class="text-xs text-red-600 mt-1">{{ form.pagaria.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Precio -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.precio_sugerido.label }}</label>
+{{ form.precio_sugerido }}
+{% if form.precio_sugerido.help_text %}<p class="text-xs text-gray-500 mt-1">{{ form.precio_sugerido.help_text }}</p>{% endif %}
+{% if form.precio_sugerido.errors %}<p class="text-xs text-red-600 mt-1">{{ form.precio_sugerido.errors.0 }}</p>{% endif %}
+</div>
+
+<!-- Aprendizajes -->
+<div>
+<label class="block text-sm font-semibold text-gray-700 mb-2">{{ form.aprendizajes.label }}</label>
+{% if form.aprendizajes.help_text %}
+<div class="mb-3 p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.aprendizajes.help_text }}</p>
+</div>
+{% endif %}
+{{ form.aprendizajes }}
+{% if form.aprendizajes.errors %}<p class="text-xs text-red-600 mt-1">{{ form.aprendizajes.errors.0 }}</p>{% endif %}
+</div>
+
+<button type="submit" class="btn-primary">💾 Guardar Entrevista</button>
+</form>
+</div>
+
+{% if can_complete %}
+<div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+<h3 class="font-semibold text-green-900 mb-2">✅ ¡Listo para completar!</h3>
+<p class="text-sm text-green-800 mb-4">Has realizado {{ entries_count }} entrevistas. Ya puedes marcar este módulo como completado.</p>
+<form method="post" action="{% url 'validation:complete' %}" class="inline">
+{% csrf_token %}
+<button type="submit" class="btn-primary bg-green-600 hover:bg-green-700">✓ Completar Módulo</button>
+</form>
+</div>
+{% endif %}
+
+<a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800 font-medium">← Volver al Dashboard</a>
+</div>
+{% endblock %}

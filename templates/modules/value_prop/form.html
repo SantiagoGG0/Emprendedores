@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Módulo 6: Propuesta de Valor - Suluhisho{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+<!-- Header -->
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="text-4xl">🎁</span>
+<div><h1 class="text-2xl font-bold">{{ module.title }}</h1><p class="text-sm text-gray-600">Paso {{ module.order }} de 7</p></div>
+</div>
+<a href="{% url 'value_prop:intro' %}" class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-medium">
+<span>📖</span><span>Ver guía</span>
+</a>
+</div>
+<p class="text-gray-700">{{ module.description }}</p>
+</div>
+
+<!-- Ejemplo Territorial -->
+{% include 'includes/territorial_example.html' %}
+
+<!-- Botón de Ayuda Flotante -->
+{% include 'includes/help_button.html' %}
+
+<form method="post" class="space-y-6">
+{% csrf_token %}
+
+<!-- Frustraciones -->
+<div class="bg-white rounded-lg shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">😣 Frustraciones del Cliente</h2>
+{% if form.frustracion_1.help_text %}
+<div class="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.frustracion_1.help_text }}</p>
+</div>
+{% endif %}
+<div class="space-y-3">
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.frustracion_1.label }}</label>{{ form.frustracion_1 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.frustracion_2.label }}</label>{{ form.frustracion_2 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.frustracion_3.label }}</label>{{ form.frustracion_3 }}</div>
+</div>
+</div>
+
+<!-- Ganancias -->
+<div class="bg-white rounded-lg shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">✨ Ganancias Deseadas</h2>
+{% if form.ganancia_1.help_text %}
+<div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.ganancia_1.help_text }}</p>
+</div>
+{% endif %}
+<div class="space-y-3">
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.ganancia_1.label }}</label>{{ form.ganancia_1 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.ganancia_2.label }}</label>{{ form.ganancia_2 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.ganancia_3.label }}</label>{{ form.ganancia_3 }}</div>
+</div>
+</div>
+
+<!-- Productos -->
+<div class="bg-white rounded-lg shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">📦 Productos/Servicios</h2>
+{% if form.producto_1.help_text %}
+<div class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.producto_1.help_text }}</p>
+</div>
+{% endif %}
+<div class="space-y-3">
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.producto_1.label }}</label>{{ form.producto_1 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.producto_2.label }}</label>{{ form.producto_2 }}</div>
+</div>
+</div>
+
+<!-- Aliviadores -->
+<div class="bg-white rounded-lg shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">💊 Cómo Alivias Frustraciones</h2>
+{% if form.aliviador_1.help_text %}
+<div class="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.aliviador_1.help_text }}</p>
+</div>
+{% endif %}
+<div class="space-y-3">
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.aliviador_1.label }}</label>{{ form.aliviador_1 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.aliviador_2.label }}</label>{{ form.aliviador_2 }}</div>
+</div>
+</div>
+
+<!-- Creadores -->
+<div class="bg-white rounded-lg shadow p-6">
+<h2 class="text-xl font-bold text-gray-800 mb-4">🚀 Cómo Generas Ganancias</h2>
+{% if form.creador_1.help_text %}
+<div class="mb-4 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r">
+<p class="text-sm text-gray-800">{{ form.creador_1.help_text }}</p>
+</div>
+{% endif %}
+<div class="space-y-3">
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.creador_1.label }}</label>{{ form.creador_1 }}</div>
+<div><label class="block text-sm font-semibold text-gray-700 mb-1">{{ form.creador_2.label }}</label>{{ form.creador_2 }}</div>
+</div>
+</div>
+
+<!-- Propuesta Final -->
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-lg p-6 border-2 border-blue-200">
+<h2 class="text-xl font-bold text-gray-900 mb-4">🎯 Tu Propuesta de Valor</h2>
+{% if form.propuesta_valor.help_text %}
+<div class="mb-4 p-4 bg-white border-l-4 border-blue-600 rounded-r shadow">
+<p class="text-sm text-gray-800">{{ form.propuesta_valor.help_text }}</p>
+</div>
+{% endif %}
+<label class="block text-sm font-semibold text-gray-900 mb-2">{{ form.propuesta_valor.label }}</label>
+{{ form.propuesta_valor }}
+{% if form.propuesta_valor.errors %}<p class="text-xs text-red-600 mt-1">{{ form.propuesta_valor.errors.0 }}</p>{% endif %}
+</div>
+
+<div class="flex justify-between">
+<a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800 font-medium">← Volver</a>
+<button type="submit" class="btn-primary">💾 Guardar y Completar</button>
+</div>
+</form>
+</div>
+{% endblock %}

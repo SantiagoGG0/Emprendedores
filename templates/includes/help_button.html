@@ -1,0 +1,111 @@
+<!-- Botón de Ayuda Flotante + Sidebar Búsqueda -->
+
+<!-- Estado Sidebar (Alpine.js) -->
+<div x-data="{ helpOpen: false, searchQuery: '' }">
+    
+    <!-- Botón Flotante (Bottom Right) -->
+    <button @click="helpOpen = !helpOpen"
+            class="fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all flex items-center justify-center z-40 group">
+        <span x-show="!helpOpen" class="text-2xl">?</span>
+        <span x-show="helpOpen" class="text-2xl">✕</span>
+        
+        <!-- Tooltip -->
+        <div class="absolute bottom-full mb-2 right-0 bg-gray-800 text-white text-xs px-3 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition pointer-events-none">
+            Base de Conocimiento
+        </div>
+    </button>
+    
+    <!-- Sidebar Overlay (cerrar al click fuera) -->
+    <div x-show="helpOpen" 
+         @click="helpOpen = false"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black bg-opacity-30 z-40"
+         style="display: none;"></div>
+    
+    <!-- Sidebar Panel -->
+    <div x-show="helpOpen"
+         @click.away="helpOpen = false"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="translate-x-full"
+         x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="translate-x-0"
+         x-transition:leave-end="translate-x-full"
+         class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 flex flex-col"
+         style="display: none;">
+        
+        <!-- Header Sidebar -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold">Base de Conocimiento</h3>
+                <button @click="helpOpen = false" 
+                        class="text-white hover:bg-white hover:text-blue-700 rounded-full w-8 h-8 flex items-center justify-center transition">
+                    ✕
+                </button>
+            </div>
+            
+            <!-- Barra de Búsqueda HTMX -->
+            <input type="text" 
+                   x-model="searchQuery"
+                   name="q"
+                   placeholder="Buscar concepto..."
+                   hx-get="{% url 'glossary_search' %}"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#search-results"
+                   hx-include="[name='module']"
+                   class="w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                   autocomplete="off">
+            
+            <!-- Hidden field: módulo actual (si aplica) -->
+            {% if current_module %}
+            <input type="hidden" name="module" value="{{ current_module.key }}">
+            {% endif %}
+        </div>
+        
+        <!-- Contenido Scrollable -->
+        <div class="flex-1 overflow-y-auto px-6 py-4">
+            
+            <!-- Instrucción Inicial -->
+            <div x-show="searchQuery === ''" class="text-center text-gray-500 py-8">
+                <span class="text-5xl mb-3 block">🔍</span>
+                <p class="text-sm">Busca conceptos, metodologías o términos clave de la plataforma</p>
+                
+                {% if current_module %}
+                <div class="mt-6">
+                    <p class="text-xs font-semibold text-gray-600 mb-2">Términos relevantes para este módulo:</p>
+                    <div id="default-terms" 
+                         hx-get="{% url 'glossary_search' %}?module={{ current_module.key }}"
+                         hx-trigger="load"
+                         hx-swap="innerHTML">
+                        <!-- Cargar términos del módulo actual -->
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Resultados Búsqueda (HTMX Target) -->
+            <div id="search-results" class="space-y-2">
+                <!-- Se llena vía HTMX -->
+            </div>
+            
+        </div>
+        
+        <!-- Footer Sidebar -->
+        <div class="border-t px-6 py-4 bg-gray-50">
+            <a href="{% url 'glossary_full' %}" 
+               class="block text-center text-sm text-blue-600 hover:text-blue-800 font-medium">
+                📚 Ver Glosario Completo
+            </a>
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- Alpine.js CDN (si no está en base.html) -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>

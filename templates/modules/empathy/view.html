@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Mi Mapa de Empatía - Suluhisho{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<h1 class="text-2xl font-bold mb-4">❤️ Tu Mapa de Empatía Completado</h1>
+<div class="space-y-4">
+<div><h3 class="font-semibold text-gray-700">Persona:</h3><p class="bg-gray-50 p-3 rounded">{{ data.persona }}</p></div>
+<div><h3 class="font-semibold text-gray-700">💭 Piensa y siente:</h3><p class="bg-gray-50 p-3 rounded">{{ data.piensa_siente }}</p></div>
+<div><h3 class="font-semibold text-gray-700">👀 Ve:</h3><p class="bg-gray-50 p-3 rounded">{{ data.ve }}</p></div>
+<div><h3 class="font-semibold text-gray-700">💬 Dice y hace:</h3><p class="bg-gray-50 p-3 rounded">{{ data.dice_hace }}</p></div>
+<div><h3 class="font-semibold text-gray-700">👂 Oye:</h3><p class="bg-gray-50 p-3 rounded">{{ data.oye }}</p></div>
+<div><h3 class="font-semibold text-gray-700">😰 Frustraciones:</h3><p class="bg-gray-50 p-3 rounded">{{ data.frustraciones }}</p></div>
+<div><h3 class="font-semibold text-gray-700">✨ Necesidades:</h3><p class="bg-gray-50 p-3 rounded">{{ data.necesidades }}</p></div>
+<div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+<h3 class="font-bold text-blue-900 mb-2">🎯 Punto de Vista (POV)</h3>
+<p class="text-blue-800">{{ data.pov }}</p>
+</div>
+</div>
+<div class="flex justify-between mt-6">
+<a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800 font-medium">← Dashboard</a>
+<a href="{% url 'empathy:form' %}" class="btn-secondary">Editar</a>
+</div>
+</div>
+</div>
+{% endblock %}

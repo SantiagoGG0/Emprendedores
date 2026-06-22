@@ -1,0 +1,119 @@
+<!-- Modal de Glosario - Carga vía HTMX -->
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" 
+     id="glossary-modal" 
+     @click.self="closeModal()">
+    
+    <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">
+                    {% if term.category == 'methodology' %}🎯
+                    {% elif term.category == 'territorial' %}🌄
+                    {% elif term.category == 'platform' %}⚙️
+                    {% endif %}
+                </span>
+                <h2 class="text-xl font-bold">{{ term.title }}</h2>
+            </div>
+            <button onclick="document.getElementById('modal-container').innerHTML = ''" 
+                    class="text-white hover:bg-white hover:text-blue-700 rounded-full w-8 h-8 flex items-center justify-center transition">
+                ✕
+            </button>
+        </div>
+        
+        <!-- Badge Categoría -->
+        <div class="px-6 py-3 border-b bg-gray-50">
+            <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full
+                {% if term.category == 'methodology' %}bg-blue-100 text-blue-800
+                {% elif term.category == 'territorial' %}bg-green-100 text-green-800
+                {% elif term.category == 'platform' %}bg-purple-100 text-purple-800
+                {% endif %}">
+                {% if term.category == 'methodology' %}Metodología
+                {% elif term.category == 'territorial' %}Contexto Territorial
+                {% elif term.category == 'platform' %}Plataforma
+                {% endif %}
+            </span>
+        </div>
+        
+        <!-- Content Scrollable -->
+        <div class="px-6 py-4 overflow-y-auto max-h-[60vh]">
+            
+            <!-- Definición Corta -->
+            <div class="mb-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Definición</h3>
+                <p class="text-gray-700 leading-relaxed">{{ term.short_definition }}</p>
+            </div>
+            
+            <!-- Explicación Detallada (Markdown) -->
+            <div class="mb-4 prose prose-sm max-w-none">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Explicación Detallada</h3>
+                <div class="text-gray-700 leading-relaxed space-y-3 text-sm">
+                    {{ term.detailed_explanation|safe|linebreaks }}
+                </div>
+            </div>
+            
+            <!-- Keywords -->
+            {% if term.keywords %}
+            <div class="mb-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Palabras Clave</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for keyword in term.keywords %}
+                    <span class="px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded">{{ keyword }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Enlaces Externos -->
+            {% if term.external_links %}
+            <div class="mb-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Recursos Externos</h3>
+                <div class="space-y-2">
+                    {% for link in term.external_links %}
+                    <a href="{{ link.url }}" target="_blank" rel="noopener"
+                       class="flex items-center gap-2 p-3 border rounded hover:bg-gray-50 transition group">
+                        <span class="text-2xl">
+                            {% if link.type == 'video' %}🎬
+                            {% elif link.type == 'article' %}📄
+                            {% elif link.type == 'tool' %}🔧
+                            {% else %}🔗
+                            {% endif %}
+                        </span>
+                        <div class="flex-1">
+                            <div class="text-sm font-medium text-blue-600 group-hover:underline">{{ link.title }}</div>
+                            <div class="text-xs text-gray-500">{{ link.url|truncatewords:6 }}</div>
+                        </div>
+                        <span class="text-gray-400">↗</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Módulos Relacionados -->
+            {% if term.related_modules.exists %}
+            <div class="mb-4">
+                <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Módulos Relacionados</h3>
+                <div class="flex flex-wrap gap-2">
+                    {% for module in term.related_modules.all %}
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full font-medium">
+                        {{ module.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+        </div>
+        
+        <!-- Footer -->
+        <div class="px-6 py-4 bg-gray-50 border-t text-center">
+            <button onclick="document.getElementById('modal-container').innerHTML = ''" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                Cerrar
+            </button>
+        </div>
+        
+    </div>
+</div>

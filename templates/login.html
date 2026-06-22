@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - Suluhisho{% endblock %}
+
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-600 mb-2">Suluhisho</h1>
+            <p class="text-gray-600">Inicia sesión para continuar</p>
+        </div>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Usuario -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                    Usuario
+                </label>
+                <input 
+                    type="text" 
+                    name="username" 
+                    id="username" 
+                    required
+                    class="form-input"
+                    placeholder="maria"
+                    autofocus
+                >
+            </div>
+            
+            <!-- Contraseña -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                    Contraseña
+                </label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="password" 
+                    required
+                    class="form-input"
+                    placeholder="••••••••"
+                >
+            </div>
+            
+            <!-- Botón -->
+            <button type="submit" class="btn-primary w-full">
+                Entrar
+            </button>
+        </form>
+        
+        <!-- Info demo -->
+        <div class="mt-6 p-4 bg-blue-50 rounded-md">
+            <p class="text-sm text-blue-800 font-medium mb-1">👤 Usuario Demo:</p>
+            <p class="text-xs text-blue-700">Usuario: <code class="bg-blue-100 px-1">maria</code></p>
+            <p class="text-xs text-blue-700">Contraseña: <code class="bg-blue-100 px-1">demo123</code></p>
+        </div>
+        
+        <!-- Registro -->
+        <div class="mt-4 text-center">
+            <p class="text-sm text-gray-600">
+                ¿No tienes cuenta? 
+                <a href="{% url 'register' %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Regístrate aquí
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

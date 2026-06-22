@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Administrativo - Suluhisho{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
+            <p class="text-gray-600">Gestión de emprendimientos y métricas</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{% url 'venture_create' %}" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                <span>📝</span>
+                <span>Registrar</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Métricas Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+        <!-- Total Emprendimientos -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-sm text-gray-600 mb-1">Total de Emprendimientos</div>
+            <div class="text-3xl font-bold text-blue-600">{{ total_ventures }}</div>
+        </div>
+
+        <!-- Total Clientes -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-sm text-gray-600 mb-1">Total de Clientes</div>
+            <div class="text-3xl font-bold text-green-600">{{ total_clients }}</div>
+        </div>
+
+        <!-- Total Aliados -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-sm text-gray-600 mb-1">Total de Aliados</div>
+            <div class="text-3xl font-bold text-purple-600">{{ total_allies }}</div>
+        </div>
+
+        <!-- Total Emprendedores -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-sm text-gray-600 mb-1">Total de Emprendedores</div>
+            <div class="text-3xl font-bold text-orange-600">{{ total_entrepreneurs }}</div>
+        </div>
+
+        <!-- Capital Invertido -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-sm text-gray-600 mb-1">Capital Total Invertido</div>
+            <div class="text-3xl font-bold text-emerald-600">${{ total_investment|floatformat:2 }}</div>
+        </div>
+    </div>
+
+    <!-- Estado de las Métricas -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Estado de las Métricas</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Usuarios por Rol (Pie Chart) -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Usuarios por Rol</h3>
+                <canvas id="usersRoleChart" width="400" height="300"></canvas>
+            </div>
+
+            <!-- Emprendimientos por Estado (Bar Chart) -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Emprendimientos por Estado</h3>
+                <canvas id="venturesStatusChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla Emprendimientos -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-bold text-gray-900">Emprendimientos Recientes</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horas</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Costo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inversiones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Emprendedor</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Progreso</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for venture in recent_ventures %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{ venture.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if venture.status == 'diagnostic' %}bg-blue-100 text-blue-800
+                                {% elif venture.status == 'active' %}bg-green-100 text-green-800
+                                {% elif venture.status == 'paused' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ venture.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ venture.hours_logged }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${{ venture.total_investment|floatformat:2 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${{ venture.total_investment|floatformat:2 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ venture.entrepreneurs_count }} emprendedor{% if venture.entrepreneurs_count != 1 %}es{% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-blue-600 h-2 rounded-full" style="width: {{ venture.completion }}%"></div>
+                                </div>
+                                <span class="text-xs text-gray-600">{{ venture.completion }}%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <div class="flex gap-2">
+                                <a href="{% url 'venture_update' venture.id %}" class="text-blue-600 hover:text-blue-800">Actualizar</a>
+                                <a href="{% url 'venture_associate' venture.id %}" class="text-green-600 hover:text-green-800">Asociar</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                            No hay emprendimientos registrados aún.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Botón volver -->
+    <div class="text-center">
+        <a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800">← Volver al dashboard principal</a>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Usuarios por Rol - Pie Chart
+const usersData = {{ users_by_role_json|safe }};
+const usersCtx = document.getElementById('usersRoleChart').getContext('2d');
+new Chart(usersCtx, {
+    type: 'pie',
+    data: {
+        labels: usersData.map(item => item.role),
+        datasets: [{
+            data: usersData.map(item => item.count),
+            backgroundColor: [
+                'rgba(59, 130, 246, 0.8)',  // Admin - blue
+                'rgba(236, 72, 153, 0.8)',  // Aliado - pink
+                'rgba(34, 197, 94, 0.8)',   // Cliente - green
+                'rgba(251, 146, 60, 0.8)'   // Emprendedor - orange
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+
+// Emprendimientos por Estado - Bar Chart
+const venturesData = {{ ventures_status_json|safe }};
+const venturesCtx = document.getElementById('venturesStatusChart').getContext('2d');
+new Chart(venturesCtx, {
+    type: 'bar',
+    data: {
+        labels: venturesData.labels,
+        datasets: [{
+            label: 'Emprendimientos',
+            data: venturesData.data,
+            backgroundColor: [
+                'rgba(59, 130, 246, 0.8)',   // Diagnóstico - blue
+                'rgba(34, 197, 94, 0.8)',    // Activo - green
+                'rgba(251, 146, 60, 0.8)',   // Pausado - orange
+                'rgba(156, 163, 175, 0.8)'   // Completado - gray
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

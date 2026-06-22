@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Registro - Suluhisho{% endblock %}
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Crear nueva cuenta
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Únete a la plataforma Suluhisho
+            </p>
+        </div>
+        
+        <form method="post" class="mt-8 space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="rounded-md bg-red-50 p-4">
+                <p class="text-sm text-red-800">{{ form.non_field_errors.0 }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="rounded-md shadow-sm space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <p class="mt-1 text-xs text-red-600">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                    <p class="mt-1 text-xs text-gray-500">Usuario único para iniciar sesión</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                    <p class="mt-1 text-xs text-red-600">{{ form.password1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                    <p class="mt-1 text-xs text-red-600">{{ form.password2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="bg-gray-50 p-4 rounded-md">
+                    <label class="block text-sm font-semibold text-gray-900 mb-3">{{ form.user_type.label }}</label>
+                    <div class="space-y-2">
+                        {% for radio in form.user_type %}
+                        <div class="flex items-center">
+                            {{ radio.tag }}
+                            <label for="{{ radio.id_for_label }}" class="ml-3 block text-sm font-medium text-gray-700">
+                                {{ radio.choice_label }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.user_type.errors %}
+                    <p class="mt-1 text-xs text-red-600">{{ form.user_type.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div id="entrepreneur-fields" style="display: none;">
+                    <div class="bg-blue-50 p-4 rounded-md space-y-3">
+                        <h3 class="text-sm font-semibold text-blue-900">📋 Información de emprendedor</h3>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.full_name.label }} *</label>
+                            {{ form.full_name }}
+                            {% if form.full_name.errors %}
+                            <p class="mt-1 text-xs text-red-600">{{ form.full_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.municipality.label }} *</label>
+                            {{ form.municipality }}
+                            {% if form.municipality.errors %}
+                            <p class="mt-1 text-xs text-red-600">{{ form.municipality.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ form.region.label }}</label>
+                            {{ form.region }}
+                            {% if form.region.errors %}
+                            <p class="mt-1 text-xs text-red-600">{{ form.region.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn-primary w-full">
+                    Crear cuenta
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <a href="{% url 'login' %}" class="text-sm text-blue-600 hover:text-blue-800">
+                    ← Ya tengo cuenta, iniciar sesión
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// Show/hide entrepreneur fields based on user type selection
+document.addEventListener('DOMContentLoaded', function() {
+    const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+    const entrepreneurFields = document.getElementById('entrepreneur-fields');
+    
+    function toggleFields() {
+        const selectedType = document.querySelector('input[name="user_type"]:checked');
+        if (selectedType && selectedType.value === 'entrepreneur') {
+            entrepreneurFields.style.display = 'block';
+        } else {
+            entrepreneurFields.style.display = 'none';
+        }
+    }
+    
+    userTypeRadios.forEach(radio => {
+        radio.addEventListener('change', toggleFields);
+    });
+    
+    toggleFields();
+});
+</script>
+{% endblock %}

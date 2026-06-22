@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}{% if venture %}Editar{% else %}Crear{% endif %} Emprendimiento - Suluhisho{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6">
+    <div class="bg-white rounded-lg shadow p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">
+            {% if venture %}
+                📝 Editar Emprendimiento
+            {% else %}
+                ➕ Crear Nuevo Emprendimiento
+            {% endif %}
+        </h1>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <!-- Nombre -->
+            <div>
+                <label for="id_name" class="block text-sm font-medium text-gray-700 mb-2">
+                    Nombre del Emprendimiento *
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label for="id_status" class="block text-sm font-medium text-gray-700 mb-2">
+                    Estado *
+                </label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.status.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Territorio -->
+            <div>
+                <label for="id_territory" class="block text-sm font-medium text-gray-700 mb-2">
+                    Territorio/Municipio
+                </label>
+                {{ form.territory }}
+                {% if form.territory.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.territory.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Descripción -->
+            <div>
+                <label for="id_description" class="block text-sm font-medium text-gray-700 mb-2">
+                    Descripción
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.description.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Inversión Total -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_total_investment" class="block text-sm font-medium text-gray-700 mb-2">
+                        Inversión Total ($)
+                    </label>
+                    {{ form.total_investment }}
+                    {% if form.total_investment.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.total_investment.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Horas Registradas -->
+                <div>
+                    <label for="id_hours_logged" class="block text-sm font-medium text-gray-700 mb-2">
+                        Horas Registradas
+                    </label>
+                    {{ form.hours_logged }}
+                    {% if form.hours_logged.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.hours_logged.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex gap-4 justify-end border-t pt-4">
+                <a href="{% url 'admin_dashboard' %}" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                    Cancelar
+                </a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    {% if venture %}Actualizar{% else %}Crear{% endif %} Emprendimiento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

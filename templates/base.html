@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Suluhisho - Plataforma de Ideación{% endblock %}</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- Alpine.js (para componentes interactivos) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        .form-input, .form-textarea {
+            @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+        }
+        
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition;
+        }
+        
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md transition;
+        }
+        
+        .module-card {
+            @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition;
+        }
+        
+        .module-completed {
+            @apply border-l-4 border-green-500;
+        }
+        
+        .module-in-progress {
+            @apply border-l-4 border-yellow-500;
+        }
+        
+        .module-locked {
+            @apply opacity-50 cursor-not-allowed;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen">
+    
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{% url 'dashboard' %}" class="text-2xl font-bold text-blue-600">
+                        Suluhisho
+                    </a>
+                    <span class="ml-3 text-sm text-gray-500">Plataforma de Ideación</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-sm text-gray-700">
+                            👤 {{ user.get_full_name|default:user.username }}
+                        </span>
+                        <a href="{% url 'logout' %}" class="text-sm text-red-600 hover:text-red-800">
+                            Salir
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-sm text-blue-600 hover:text-blue-800">
+                            Iniciar Sesión
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Messages -->
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        {% for message in messages %}
+        <div class="{% if message.tags == 'error' %}bg-red-100 border-red-400 text-red-700{% elif message.tags == 'success' %}bg-green-100 border-green-400 text-green-700{% else %}bg-blue-100 border-blue-400 text-blue-700{% endif %} border px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p class="text-center text-sm text-gray-500">
+                Suluhisho © 2026 - Módulo de Ideación para Emprendedores en Territorios PDET
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Contenedor Modal HTMX (target global) -->
+    <div id="modal-container"></div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

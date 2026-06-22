@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Módulo 1: Ikigai - Suluhisho{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Formulario Section Header -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-4xl">🎯</span>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">{{ module.title }}</h2>
+                    <p class="text-gray-600">Paso {{ module.order }} de 7</p>
+                </div>
+            </div>
+            <a href="{% url 'ikigai:intro' %}" 
+               class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-medium">
+                <span>📖</span>
+                <span>Ver guía</span>
+            </a>
+        </div>
+        <p class="text-gray-700">{{ module.description }}</p>
+    </div>
+    
+    <!-- Ejemplo Territorial -->
+    {% include 'includes/territorial_example.html' %}
+    
+    <!-- Botón de Ayuda Flotante -->
+    {% include 'includes/help_button.html' %}
+    
+    <!-- Formulario -->
+    <form method="post" class="space-y-8">
+        {% csrf_token %}
+        
+        <!-- Sección 1: ¿Qué amas hacer? -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-2">❤️</span>
+                1. ¿Qué amas hacer?
+            </h2>
+            
+            {% if form.amas_1.help_text %}
+            <div class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r">
+                <p class="text-sm text-gray-800">{{ form.amas_1.help_text }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.amas_1.label }}
+                    </label>
+                    {{ form.amas_1 }}
+                    {% if form.amas_1.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.amas_1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.amas_2.label }}
+                    </label>
+                    {{ form.amas_2 }}
+                    {% if form.amas_2.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.amas_2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.amas_3.label }}
+                    </label>
+                    {{ form.amas_3 }}
+                    {% if form.amas_3.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.amas_3.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">
+                        {{ form.amas_4.label }}
+                    </label>
+                    {{ form.amas_4 }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección 2: ¿En qué eres bueno/a? -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-2">⭐</span>
+                2. ¿En qué eres bueno/a?
+            </h2>
+            
+            {% if form.bueno_1.help_text %}
+            <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-r">
+                <p class="text-sm text-gray-800">{{ form.bueno_1.help_text }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.bueno_1.label }}
+                    </label>
+                    {{ form.bueno_1 }}
+                    {% if form.bueno_1.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.bueno_1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.bueno_2.label }}
+                    </label>
+                    {{ form.bueno_2 }}
+                    {% if form.bueno_2.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.bueno_2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.bueno_3.label }}
+                    </label>
+                    {{ form.bueno_3 }}
+                    {% if form.bueno_3.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.bueno_3.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">
+                        {{ form.bueno_4.label }}
+                    </label>
+                    {{ form.bueno_4 }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección 3: ¿Qué necesita tu comunidad? -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-2">🏘️</span>
+                3. ¿Qué necesita tu comunidad?
+            </h2>
+            
+            {% if form.necesita_1.help_text %}
+            <div class="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-r">
+                <p class="text-sm text-gray-800">{{ form.necesita_1.help_text }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.necesita_1.label }}
+                    </label>
+                    {{ form.necesita_1 }}
+                    {% if form.necesita_1.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.necesita_1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.necesita_2.label }}
+                    </label>
+                    {{ form.necesita_2 }}
+                    {% if form.necesita_2.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.necesita_2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.necesita_3.label }}
+                    </label>
+                    {{ form.necesita_3 }}
+                    {% if form.necesita_3.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.necesita_3.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">
+                        {{ form.necesita_4.label }}
+                    </label>
+                    {{ form.necesita_4 }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección 4: ¿Por qué pagarían? -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-2">💰</span>
+                4. ¿Por qué pagarían?
+            </h2>
+            
+            {% if form.pagarian_1.help_text %}
+            <div class="mb-4 p-4 bg-purple-50 border-l-4 border-purple-500 rounded-r">
+                <p class="text-sm text-gray-800">{{ form.pagarian_1.help_text }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.pagarian_1.label }}
+                    </label>
+                    {{ form.pagarian_1 }}
+                    {% if form.pagarian_1.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.pagarian_1.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.pagarian_2.label }}
+                    </label>
+                    {{ form.pagarian_2 }}
+                    {% if form.pagarian_2.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.pagarian_2.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.pagarian_3.label }}
+                    </label>
+                    {{ form.pagarian_3 }}
+                    {% if form.pagarian_3.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.pagarian_3.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">
+                        {{ form.pagarian_4.label }}
+                    </label>
+                    {{ form.pagarian_4 }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección 5: Frase de Intersección (Síntesis) -->
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg shadow-lg p-6 border-2 border-blue-200">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <span class="text-2xl mr-2">✨</span>
+                5. Tu Propósito (Ikigai)
+            </h2>
+            
+            {% if form.interseccion.help_text %}
+            <div class="mb-4 p-4 bg-white border-l-4 border-blue-600 rounded-r shadow">
+                <p class="text-sm text-gray-800">{{ form.interseccion.help_text }}</p>
+            </div>
+            {% endif %}
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-900 mb-2">
+                    {{ form.interseccion.label }}
+                </label>
+                {{ form.interseccion }}
+                {% if form.interseccion.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.interseccion.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="flex justify-between items-center">
+            <a href="{% url 'dashboard' %}" class="btn-secondary">
+                ← Volver al Dashboard
+            </a>
+            
+            <button type="submit" class="btn-primary">
+                Guardar y Completar Módulo
+            </button>
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

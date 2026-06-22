@@ -1,0 +1,8 @@
+Django==6.0.6
+djangorestframework==3.17.1
+psycopg2-binary==2.9.12
+Pillow==12.2.0
+celery==5.6.3
+redis==8.0.0
+django-polymorphic==4.11.5
+python-dotenv==1.2.2

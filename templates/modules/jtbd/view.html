@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Mi Job To Be Done - Suluhisho{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+<h1 class="text-2xl font-bold mb-4">🎯 Tu Job To Be Done Completado</h1>
+<div class="space-y-4">
+<div><h3 class="font-semibold text-gray-700">📍 Situación:</h3><p class="bg-gray-50 p-3 rounded">{{ data.situacion }}</p></div>
+<div><h3 class="font-semibold text-gray-700">💪 Motivación:</h3><p class="bg-gray-50 p-3 rounded">{{ data.motivacion }}</p></div>
+<div><h3 class="font-semibold text-gray-700">✨ Resultado esperado:</h3><p class="bg-gray-50 p-3 rounded">{{ data.resultado_esperado }}</p></div>
+<div class="bg-green-50 border-l-4 border-green-500 p-4">
+<h3 class="font-bold text-green-900 mb-2">📝 Job Statement</h3>
+<p class="text-green-800">{{ data.job_statement }}</p>
+</div>
+</div>
+<div class="flex justify-between mt-6">
+<a href="{% url 'dashboard' %}" class="text-blue-600 hover:text-blue-800 font-medium">← Dashboard</a>
+<a href="{% url 'jtbd:form' %}" class="btn-secondary">Editar</a>
+</div>
+</div>
+</div>
+{% endblock %}
