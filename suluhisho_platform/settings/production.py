@@ -10,8 +10,25 @@ DEBUG = False
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
-# Database - override base.py if DATABASE_URL is set
-if 'DATABASE_URL' in os.environ:
+# Database - build DATABASE_URL from EB RDS environment variables if not provided
+if 'RDS_HOSTNAME' in os.environ:
+    # EB provides RDS_* variables, construct DATABASE_URL
+    database_url = 'postgresql://{user}:{password}@{host}:{port}/{name}'.format(
+        user=os.environ['RDS_USERNAME'],
+        password=os.environ['RDS_PASSWORD'],
+        host=os.environ['RDS_HOSTNAME'],
+        port=os.environ.get('RDS_PORT', '5432'),
+        name=os.environ['RDS_DB_NAME']
+    )
+    DATABASES = {
+        'default': dj_database_url.parse(
+            database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+elif 'DATABASE_URL' in os.environ:
+    # Use explicit DATABASE_URL if provided
     DATABASES = {
         'default': dj_database_url.parse(
             os.environ['DATABASE_URL'],
