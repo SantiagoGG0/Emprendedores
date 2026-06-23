@@ -50,12 +50,13 @@ MIDDLEWARE = [
 ]
 
 # Security settings
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
+# Disable HTTPS-only settings until SSL certificate configured
+SECURE_SSL_REDIRECT = False  # Enable after adding HTTPS to load balancer
+SESSION_COOKIE_SECURE = False  # Enable with HTTPS
+CSRF_COOKIE_SECURE = False  # Enable with HTTPS
+# SECURE_HSTS_SECONDS = 31536000  # Enable with HTTPS
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Static files - use WhiteNoise
